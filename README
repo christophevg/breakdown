@@ -1,0 +1,42 @@
+Breakdown - an ultra-light Markdown(-like) implementation
+
+---
+
+Breakdown implements a small subset of the Markdown language. See
+http://daringfireball.net/projects/markdown/ for more info on that.
+
+The idea behind Breakdown is to support only a very limited set of the entire
+Markdown language, to allow very basic users to use it. So no HTML tags and
+only one notation style for each supported style.
+
+Breakdown (currently) (only) supports:
+ # heading
+ ## heading
+ * bullet
+ --- (horizontal line)
+ ... *italic* ...
+ ... **bold** ...
+ ... [label](link) ...
+ ... ![label](image) ...
+ ... http://... ...
+ and automatic paragraph detection.
+
+I'll probably will start to make adaptation to the language itself ... hmm, I
+already did ;-)
+
+The goal is to provide completely identical implementations in both Javascript
+and server-side languages. To start with, I'm going to implement it in PHP.
+
+Javascript
+
+For now I've also copied the interface of Showdown, the Javascript
+implementation of Markdown. See http://attacklab.net/showdown/ for more info.
+
+Usage:
+	var input = "Breakdown *rocks* too";
+	var html  = new Breakdown.converter().makeHtml(input);
+	alert(html); // Breakdown <em>rocks</em> too
+
+PHP
+
+TODO
