@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="breakdown.js"></script>
+  </head>
+  <body>
+    <script>
+        var input = "Introduction paragraph\n\
+# Heading 1\n\
+## Heading 2\n\
+Some text containing **bold** and *italic* parts, as well as [a link to my \n\
+website](http://christophe.vg) and another one : http://christophe.vg\n\
+\n\
+And a second paragraph\n\
+\n\
+---\n\
+\n\
+## Bullets\n\
+* bullet 1\n\
+* bullet 2\n\
+\n\
+And some more text in a second paragraph.\n\
+\n\
+and this might be me ;-)\n\
+\n\
+![Christophe VG](http://christophevg.github.com/christophe.vg/images/avatar.png)";
+
+    html = new Breakdown.converter().makeHtml(input);
+    
+    document.write( html );
+    console.log( html );
+
+    </script>
+  </body>
+</html>
