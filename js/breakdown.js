@@ -1,6 +1,8 @@
 var Breakdown = {
   converter : function converter() {
     this.makeHtml = function makeHtml(input) {
+      input = input.replace( /</, "&lt;" )
+                   .replace( />/, "&gt;" );
 
       var html = "";
 
