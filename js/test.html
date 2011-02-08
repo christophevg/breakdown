@@ -56,7 +56,9 @@ and this might be me ;-)
       var converter = new Breakdown.converter();
     
       function convert() {
-        output.innerHTML = converter.makeHtml( input.value );
+        var html = converter.makeHtml( input.value );
+        console.log(html);
+        output.innerHTML = html;
       };
 
       input.onchange = convert;
