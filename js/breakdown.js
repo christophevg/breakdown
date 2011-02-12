@@ -2,7 +2,7 @@
  * breakdown.js
  * an ultra-light Markdown(-like) implementation
  *
- * http://github.com/christophevg/breakdown
+ * See http://github.com/christophevg/breakdown for updates and license info
  */
 
 var Breakdown = {
