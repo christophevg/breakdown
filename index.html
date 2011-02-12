@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="https://github.com/christophevg/breakdown/raw/master/js/breakdown.js"></script>
+    <style>
+#input {
+  width: 49%;
+  height: 400px;
+  float: left;
+}
+
+#output {
+  width: 49%;
+  height: 400px;
+  border: 1px solid #737373;
+  overflow: auto;
+  float: right;
+}
+    </style>
+  <body>
+    <h1>Breakdown demo</h1>
+
+    <p>
+      This is a little demo page for the Breakdown markup language, 
+      implemented in Javascript. You can just type in the textarea on the left
+      and the corresponding HTML will be rendered on the right.
+    </p>
+
+    <div id="output"></div>
+
+    <textarea id="input">
+Introduction paragraph
+# Heading 1
+## Heading 2
+Some text containing **bold** and *italic* parts, as well as [a link to my
+website](http://christophe.vg) and another one : http://christophe.vg
+
+And a second paragraph
+
+---
+
+## Bullets
+* bullet 1
+* bullet 2
+
+And some more text in a second paragraph.
+
+and this might be me ;-)
+
+![Christophe VG](http://christophevg.github.com/christophe.vg/images/avatar.png)
+    </textarea>
+
+    <script>
+      var input     = document.getElementById("input");
+      var output    = document.getElementById("output");
+      var converter = new Breakdown.converter();
+    
+      function convert() {
+        var html = converter.makeHtml( input.value );
+        console.log(html);
+        output.innerHTML = html;
+      };
+
+      input.onchange = convert;
+      input.onkeyup = convert;
+      window.onload = convert;
+    </script>
+  </body>
+</html>
