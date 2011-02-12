@@ -21,11 +21,14 @@ Breakdown (currently) (only) supports:
  ... http://... ...
  and automatic paragraph detection.
 
-I'll probably will start to make adaptation to the language itself ... hmm, I
-already did ;-)
+I'll probably start making changes to the language itself - I already did when
+dropping the diamond brackets around URLs ;-)
 
 The goal is to provide completely identical implementations in both Javascript
-and server-side languages. To start with, I'm going to implement it in PHP.
+and server-side languages. This allows the use of Javascript in the browser,
+offering the user a real-time rendering of his/her work. On the server the
+same work can also be converted to the identical HTML representation and be
+sent to the browser as such.
 
 Javascript
 
@@ -37,6 +40,7 @@ Usage:
 	var html  = new Breakdown.converter().makeHtml(input);
 	alert(html); // Breakdown <em>rocks</em> too
 
-PHP
+Online example: http://christophevg.github.com/breakdown
 
-TODO
+PHP
+	TODO
