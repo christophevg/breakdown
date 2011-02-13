@@ -30,7 +30,7 @@ offering the user a real-time rendering of his/her work. On the server the
 same work can also be converted to the identical HTML representation and be
 sent to the browser as such.
 
-Javascript
+# Javascript
 
 For now I've also copied the interface of Showdown, the Javascript
 implementation of Markdown. See http://attacklab.net/showdown/ for more info.
@@ -42,5 +42,13 @@ Usage:
 
 Online example: http://christophevg.github.com/breakdown
 
-PHP
-	TODO
+# PHP
+
+The current implementation is an almost literal translation of the Javascript
+code. It deserves a PHP-ization, but for now it works ;-)
+
+Usage:
+  $input     = "Breakdown *rocks* too";
+  $converter = Breakdown::getConverter();
+	$html      = $converter->makeHtml($input);
+	echo $html; // Breakdown <em>rocks</em> too
