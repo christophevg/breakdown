@@ -52,3 +52,30 @@ Usage:
   $converter = Breakdown::getConverter();
 	$html      = $converter->makeHtml($input);
 	echo $html; // Breakdown <em>rocks</em> too
+
+# Testing
+
+The t/ directory contains some scripts that test all implementations using the
+same input and expected results data. This allows for some level of regression
+testing.
+
+Usage:
+	$ cd t
+	$ ./runAllTests.sh 
+	Testing all-in-one from Javascript
+	OK
+	Testing all-in-one from PHP
+	OK
+
+You need a copy of the Rhino Javascript engine (see
+http://www.mozilla.org/rhino/download.html). The runAllTest.sh script by
+default tries to find it in its own directory. To supply the location of your
+Rhino installation - and more specifically that of js.jar - pass it using the
+RHINO environment variable. The same goes for the Java and PHP CLI executable.
+
+  $ cd t
+	$ RHINO=/my/install/of/js.jar PHP=/my/install/of/php ./runAllTests.sh
+	Testing all-in-one from Javascript
+	OK
+	Testing all-in-one from PHP
+	OK

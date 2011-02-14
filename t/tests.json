@@ -1,0 +1,7 @@
+[
+  {
+    "label" : "all-in-one",
+    "input" : "# Heading 1\n## Heading 2\nSome text containing **bold** and *italic* parts, as well as [a link to my\nwebsite](http://christophe.vg) and another one : http://christophe.vg\n\nAnd a second paragraph\n\n---\n\n## Bullets\n* bullet 1\n* bullet 2\n\nAnd some more text in a second paragraph.\n\nand this might be me ;-)\n\n![Christophe VG](http://christophevg.github.com/christophe.vg/images/avatar.png)",
+    "expected" : "\n\n<h1>Heading 1</h1>\n\n<h2>Heading 2</h2>\n\n<p>Some text containing <b>bold</b> and <i>italic</i> parts, as well as <a href=\"http://christophe.vg\">a link to my\nwebsite</a> and another one : <a href=\"http://christophe.vg\">http://christophe.vg</a></p>\n\n<p>And a second paragraph</p>\n\n<hr>\n\n<h2>Bullets</h2>\n\n<ul>\n<li>bullet 1</li>\n<li>bullet 2</li>\n</ul>\n\n<p>And some more text in a second paragraph.</p>\n\n<p>and this might be me ;-)</p>\n\n<p><img src=\"http://christophevg.github.com/christophe.vg/images/avatar.png\" alt=\"Christophe VG\"></p>\n\n"
+  }
+]
