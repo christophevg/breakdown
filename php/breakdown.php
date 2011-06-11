@@ -52,13 +52,17 @@ class Breakdown {
   private function translateInlines($input) {
     $patterns     = array( '/\*\*([^\*]+)\*\*/',
                            '/\*([^\*]+)\*/',
-                           '/!\[([^\]]+)\]\(([^)]+)\)/',
-                           '/\[([^\]]+)\]\(([^)]+)\)/',
+                           '/\[\[([^\|\]]+)\|([^\]]+)\]\]/',
+                           '/\[\[([^\]]+)\]\]/',
+                           '/\[([^\|\]]+)\|([^\]]+)\]/',
+                           '/\[([^\]]+)\]/',
                            '/([^"])(http:\/\/[a-zA-Z.]+)/' );
     $replacements = array( '<b>\1</b>',
                            '<i>\1</i>',
-                           '<img src="\2" alt="\1">',
-                           '<a href="\2">\1</a>',
+                           '<img src="\1" alt="\2">',
+                           '<img src="\1">',
+                           '<a href="\1">\2</a>',
+                           '<a href="\1">\1</a>',
                            '\1<a href="\2">\2</a>' );
     return preg_replace( $patterns, $replacements, $input );
   }

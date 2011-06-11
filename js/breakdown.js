@@ -42,11 +42,13 @@ var Breakdown = {
 
     // bold, italic, images and links can appear anywhere in-line the text
     function translateInlines(input) {
-      return input.replace( /\*\*([^\*]+)\*\*/g,            "<b>$1</b>" )
-                  .replace( /\*([^\*]+)\*/g,                "<i>$1</i>" )
-                  .replace( /!\[([^\]]+)\]\(([^)]+)\)/g,    "<img src=\"$2\" alt=\"$1\">" )
-                  .replace( /\[([^\]]+)\]\(([^)]+)\)/g,     "<a href=\"$2\">$1</a>" )
-                  .replace( /([^"])(http:\/\/[a-zA-Z.]+)/g, "$1<a href=\"$2\">$2</a>" )
+      return input.replace( /\*\*([^\*]+)\*\*/g,             "<b>$1</b>" )
+                  .replace( /\*([^\*]+)\*/g,                 "<i>$1</i>" )
+                  .replace( /\[\[([^\|\]]+)\|([^\]]+)\]\]/g, "<img src=\"$1\" alt=\"$2\">" )
+                  .replace( /\[\[([^\]]+)\]\]/g,             "<img src=\"$1\">" )
+                  .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,     "<a href=\"$1\">$2</a>" )
+                  .replace( /\[([^\]]+)\]/g,                 "<a href=\"$1\">$1</a>" )
+                  .replace( /([^"])(http:\/\/[a-zA-Z.]+)/g,  "$1<a href=\"$2\">$2</a>" )
                   ;
     };
 

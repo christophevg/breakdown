@@ -3,7 +3,8 @@ Breakdown - an ultra-light Markdown(-like) implementation
 ---
 
 Breakdown implements a small subset of the Markdown language. See
-http://daringfireball.net/projects/markdown/ for more info on that.
+http://daringfireball.net/projects/markdown/ for more info on that. But 
+breakdown also differs from the standard Markdown.
 
 The idea behind Breakdown is to support only a very limited set of the entire
 Markdown language, to allow very basic users to use it. So no HTML tags and
@@ -16,13 +17,15 @@ Breakdown (currently) (only) supports:
  --- (horizontal line)
  ... *italic* ...
  ... **bold** ...
- ... [label](link) ...
- ... ![label](image) ...
- ... http://... ...
  and automatic paragraph detection.
 
-I'll probably start making changes to the language itself - I already did when
-dropping the diamond brackets around URLs ;-)
+Some other markups are possible:
+
+[link]
+[link|label]
+[[image-link]]
+[[image-link|alternate text]]
+http://link
 
 The goal is to provide completely identical implementations in both Javascript
 and server-side languages. This allows the use of Javascript in the browser,
