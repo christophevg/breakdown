@@ -47,7 +47,9 @@ And a second paragraph.
 
 And some more text in a second paragraph.
 
-and this might be me ;-)
+## Images
+
+This might be me ;-)
 
 [[http://christophevg.github.com/christophe.vg/images/avatar.png|Christophe VG]]
 
@@ -58,6 +60,12 @@ even twice ...
 and even with a link ...
 
 [http://christophe.vg|[[http://christophevg.github.com/christophe.vg/images/avatar.png]]]
+
+## Include support using Ajax
+
+[include:include1.html]
+---
+[include:include2.html]
     </textarea>
 
     <script>
@@ -69,6 +77,7 @@ and even with a link ...
         var html = converter.makeHtml( input.value );
         console.log(html);
         output.innerHTML = html;
+        converter.activateHtml();
       };
 
       input.onchange = convert;

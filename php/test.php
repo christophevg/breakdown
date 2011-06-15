@@ -21,7 +21,9 @@ And a second paragraph.
 
 And some more text in a second paragraph.
 
-and this might be me ;-)
+## Images
+
+This might be me ;-)
 
 [[http://christophevg.github.com/christophe.vg/images/avatar.png|Christophe VG]]
 
@@ -32,6 +34,13 @@ even twice ...
 and even with a link ...
 
 [http://christophe.vg|[[http://christophevg.github.com/christophe.vg/images/avatar.png]]]
+
+## Include support using Ajax
+
+[include:include.php?c=1]
+---
+[include:include.php?c=2]
+
 EOT;
 
 $converter = Breakdown::getConverter();

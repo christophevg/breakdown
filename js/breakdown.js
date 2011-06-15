@@ -10,6 +10,7 @@ var Breakdown = {
 
     // top-level exposed method to turn breakdown input into HTML
     this.makeHtml = function makeHtml(input) {
+      initIncludes();
       input = prepareBlocks(input);
       input = escapeHtml(input);
       input = translateLines(input);
@@ -46,6 +47,7 @@ var Breakdown = {
                   .replace( /\*([^\*]+)\*/g,                 "<i>$1</i>" )
                   .replace( /\[\[([^\|\]]+)\|([^\]]+)\]\]/g, "<img src=\"$1\" alt=\"$2\">" )
                   .replace( /\[\[([^\]]+)\]\]/g,             "<img src=\"$1\">" )
+                  .replace( /\[include:([^\]]+)\]/g,         insertInclude )
                   .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,     "<a href=\"$1\">$2</a>" )
                   .replace( /\[([^\]]+)\]/g,                 "<a href=\"$1\">$1</a>" )
                   .replace( /([^>"]+)(http:\/\/[a-zA-Z.]+)/g,"$1<a href=\"$2\">$2</a>" )
@@ -79,7 +81,7 @@ var Breakdown = {
     // all other blocks are paragraphs and wrapped in paragraph tags
     function generateBlock(body) {
       if( body.match( /^[ \t]*$/ ) ||
-          body.match( /^(<h[1-6]+|<hr>)/ ) )
+          body.match( /^(<h[1-6]+|<hr>|<span)/ ) )
       {
         return body;
       } else if( body.match( /^<li>/ ) ) {
@@ -89,5 +91,69 @@ var Breakdown = {
       }
     };
 
+    // AJAX support to fetch included content
+    var includeFunctions = [];
+
+    function initIncludes() {
+      includeFunctions = [];
+    }
+
+    // create a XMLHTTP object
+    function getXMLHTTP() {
+      var xmlhttp;
+      if( window.XMLHttpRequest ) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+      } else if( window.ActiveXObject ) {
+        // code for IE6, IE5
+        xmlhttp = new ActiveXObject( "Microsoft.XMLHTTP" );
+      } else {
+        alert( "Your browser does not support XMLHTTP!" );
+      }
+      return xmlhttp;
+    }
+
+    // url to fetch content from a URL and pass it to a processing callback
+    function fetch(url, callback) {
+      var xmlhttp = getXMLHTTP();
+      xmlhttp.open( "GET", url, true );
+      xmlhttp.onreadystatechange = function() {
+        if( xmlhttp.readyState  == 4 ) {
+          if( xmlhttp.status == 200 ) {
+            callback( xmlhttp.responseText );
+          } else {
+            callback();
+          }
+        }
+      };
+      xmlhttp.send(null);
+    }
+
+    // method to generate HTML and JS to include content, using include method
+    var includeIndex = 0;
+
+    function insertInclude(m, location) {
+      includeIndex++;
+      includeFunctions.push( function(url, index) { return function() {
+        include( url, "_include_" + index );
+      } }( location, includeIndex ) );
+      return '<span id="_include_' + includeIndex + '"></span>' + "\n";
+    }
+
+    function include(url, element) {
+      fetch(url, function( response ) {
+        if( ! response ) {
+          response = '<span class="bd-error">failed to include '+url+'</span>';
+        }
+        document.getElementById( element ).innerHTML = response;
+      } );
+    }
+
+    // external method to execute the dynamic part of the generated HTML
+    this.activateHtml = function activateHtml() {
+      for( var index=0; index<includeFunctions.length; index++ ) {
+        includeFunctions[index]();
+      }
+    }
   }
 }

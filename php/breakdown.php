@@ -14,12 +14,14 @@ class Breakdown {
 
   // top-level exposed method to turn breakdown input into HTML
   public function makeHtml($input) {
+    $this->initIncludes();
     $input = $this->prepareBlocks($input);
     $input = $this->escapeHtml($input);
     $input = $this->translateLines($input);
     $input = $this->translateInlines($input);
     $input = $this->addBlocks($input);
     $input = $this->cleanUp($input);
+    $input = $this->activateIncludes($input);
     return $input;
   }
 
@@ -48,8 +50,84 @@ class Breakdown {
     return preg_replace( $patterns, $replacements, $input );
   }
 
+  private $insertIncludeActivation = false;
+  private $includeIndex = 0;
+
+  private function initIncludes() {
+    $this->insertIncludeActivation = false;
+  }
+
+  private function activateIncludes($input) {
+    if( ! $this->insertIncludeActivation ) { return $input; }
+    $input .= <<<EOT
+<script>
+  // create a XMLHTTP object
+  function getXMLHTTP() {
+    var xmlhttp;
+    if( window.XMLHttpRequest ) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp = new XMLHttpRequest();
+    } else if( window.ActiveXObject ) {
+      // code for IE6, IE5
+      xmlhttp = new ActiveXObject( "Microsoft.XMLHTTP" );
+    } else {
+      alert( "Your browser does not support XMLHTTP!" );
+    }
+    return xmlhttp;
+  }
+
+  // url to fetch content from a URL and pass it to a processing callback
+  function fetch(url, callback) {
+    var xmlhttp = getXMLHTTP();
+    xmlhttp.open( "GET", url, true );
+    xmlhttp.onreadystatechange = function() {
+      if( xmlhttp.readyState  == 4 ) {
+        if( xmlhttp.status == 200 ) {
+          callback( xmlhttp.responseText );
+        } else {
+          callback();
+        }
+      }
+    };
+    xmlhttp.send(null);
+  }
+
+  for( var index=0; index<includeFunctions.length; index++ ) {
+    includeFunctions[index]();
+  }
+</script>
+EOT;
+    return "<script>var includeFunctions = [];</script>\n\n$input";
+  }
+
+  private function insertInclude($matches) {
+    $this->insertIncludeActivation = true;
+    $this->includeIndex++;
+    $id = "_include_{$this->includeIndex}";
+    $url = $matches[1];
+
+    return <<<EOT
+<span id="$id"></span>
+<script>
+  includeFunctions.push( function() {
+    fetch( '$url', function(responseText) {
+      if( ! responseText ) {
+        responseText = '<span class="bd-error">failed to include $url</span>';
+      }
+      document.getElementById('$id').innerHTML = responseText;
+    } );
+  } );
+</script>
+EOT;
+  }
+
   // bold, italic, images and links can appear anywhere in-line the text
   private function translateInlines($input) {
+    // include support
+    $input = preg_replace_callback( '/\[include:([^\]]+)\]/',
+                                    array( $this, 'insertInclude' ),
+                                    $input );
+    // other inlines
     $patterns     = array( '/\*\*([^\*]+)\*\*/',
                            '/\*([^\*]+)\*/',
                            '/\[\[([^\|\]]+)\|([^\]]+)\]\]/',
@@ -88,7 +166,7 @@ class Breakdown {
   // all other blocks are paragraphs and wrapped in paragraph tags
   function generateBlock($body) {
     if( preg_match( '/^[ \t]*$/', $body ) ||
-        preg_match( '/^(<h[1-6]+|<hr>)/', $body ) )
+        preg_match( '/^(<h[1-6]+|<hr>|<span|<script)/', $body ) )
     {
       return $body;
     } else if( preg_match( '/^<li>/', $body ) ) {
