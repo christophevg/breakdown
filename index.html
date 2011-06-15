@@ -76,6 +76,7 @@ and even with a link ...
       function convert() {
         var html = converter.makeHtml( input.value );
         output.innerHTML = html;
+        converter.activateHtml();
       };
 
       input.onchange = convert;
