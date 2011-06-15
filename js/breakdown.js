@@ -48,7 +48,7 @@ var Breakdown = {
                   .replace( /\[\[([^\]]+)\]\]/g,             "<img src=\"$1\">" )
                   .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,     "<a href=\"$1\">$2</a>" )
                   .replace( /\[([^\]]+)\]/g,                 "<a href=\"$1\">$1</a>" )
-                  .replace( /([^"])(http:\/\/[a-zA-Z.]+)/g,  "$1<a href=\"$2\">$2</a>" )
+                  .replace( /([^>"]+)(http:\/\/[a-zA-Z.]+)/g,"$1<a href=\"$2\">$2</a>" )
                   ;
     };
 
