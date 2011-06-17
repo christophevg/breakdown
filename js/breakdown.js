@@ -81,7 +81,7 @@ var Breakdown = {
     // all other blocks are paragraphs and wrapped in paragraph tags
     function generateBlock(body) {
       if( body.match( /^[ \t]*$/ ) ||
-          body.match( /^(<h[1-6]+|<hr>|<span)/ ) )
+          body.match( /^(<h[1-6]+|<hr>|<div)/ ) )
       {
         return body;
       } else if( body.match( /^<li>/ ) ) {
@@ -137,13 +137,14 @@ var Breakdown = {
       includeFunctions.push( function(url, index) { return function() {
         include( url, "_include_" + index );
       } }( location, includeIndex ) );
-      return '<span id="_include_' + includeIndex + '"></span>' + "\n";
+      return '<div style="display:inline" id="_include_' + includeIndex + '">' +
+             '</div>' + "\n";
     }
 
     function include(url, element) {
-      fetch(url, function( response ) {
+      fetch( url, function( response ) {
         if( ! response ) {
-          response = '<span class="bd-error">failed to include '+url+'</span>';
+          response = '<div class="bd-error">failed to include '+url+'</div>';
         }
         document.getElementById( element ).innerHTML = response;
       } );

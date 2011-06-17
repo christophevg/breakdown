@@ -107,12 +107,12 @@ EOT;
     $url = $matches[1];
 
     return <<<EOT
-<span id="$id"></span>
+<div style="display:inline" id="$id"></div>
 <script>
   includeFunctions.push( function() {
     fetch( '$url', function(responseText) {
       if( ! responseText ) {
-        responseText = '<span class="bd-error">failed to include $url</span>';
+        responseText = '<div class="bd-error">failed to include $url</div>';
       }
       document.getElementById('$id').innerHTML = responseText;
     } );
@@ -166,7 +166,7 @@ EOT;
   // all other blocks are paragraphs and wrapped in paragraph tags
   function generateBlock($body) {
     if( preg_match( '/^[ \t]*$/', $body ) ||
-        preg_match( '/^(<h[1-6]+|<hr>|<span|<script)/', $body ) )
+        preg_match( '/^(<h[1-6]+|<hr>|<div)/', $body ) )
     {
       return $body;
     } else if( preg_match( '/^<li>/', $body ) ) {
