@@ -134,37 +134,27 @@ var Breakdown = {
 
     function insertInclude(m, location) {
       includeIndex++;
-      includeFunctions.push( function(url, index) { return function() {
-        include( url, "_include_" + index );
+      includeFunctions.push( function(url, index) { return function(cb) {
+        include( url, "_include_" + index, cb );
       } }( location, includeIndex ) );
       return '<div style="display:inline" id="_include_' + includeIndex + '">' +
              '</div>' + "\n";
     }
 
-    function include(url, element) {
+    function include(url, element, cb) {
       fetch( url, function( response ) {
         if( ! response ) {
           response = '<div class="bd-error">failed to include '+url+'</div>';
         }
         document.getElementById( element ).innerHTML = response;
+        if( typeof cb == "function" ) { cb(); }
       } );
     }
 
-    var callbacks = [];
-
-    // external method to register a callback function that's being called
-    // when the HTML has been activated
-    this.onHtmlActivated = function onHtmlActivated(cb) {
-      callbacks.push(cb);
-    }
-
     // external method to execute the dynamic part of the generated HTML
-    this.activateHtml = function activateHtml() {
+    this.activateHtml = function activateHtml(callback) {
       for( var index=0; index<includeFunctions.length; index++ ) {
-        includeFunctions[index]();
-      }
-      for( var index=0; index<callbacks.length; index++ ) {
-        callbacks[index]();
+        includeFunctions[index](callback);
       }
     }
   }
