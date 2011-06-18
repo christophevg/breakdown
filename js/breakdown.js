@@ -150,10 +150,21 @@ var Breakdown = {
       } );
     }
 
+    var callbacks = [];
+
+    // external method to register a callback function that's being called
+    // when the HTML has been activated
+    this.onHtmlActivated = function onHtmlActivated(cb) {
+      callbacks.push(cb);
+    }
+
     // external method to execute the dynamic part of the generated HTML
     this.activateHtml = function activateHtml() {
       for( var index=0; index<includeFunctions.length; index++ ) {
         includeFunctions[index]();
+      }
+      for( var index=0; index<callbacks.length; index++ ) {
+        callbacks[index]();
       }
     }
   }

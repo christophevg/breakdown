@@ -79,6 +79,10 @@ and even with a link ...
         converter.activateHtml();
       };
 
+      converter.onHtmlActivated( function postHtmlActivation() {
+        // do something ;-)
+      } );
+
       input.onchange = convert;
       input.onkeyup = convert;
       window.onload = convert;
