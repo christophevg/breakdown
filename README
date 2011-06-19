@@ -1,4 +1,4 @@
-Breakdown - an ultra-light Markdown(-like) implementation
+Breakdown - an ultra-light Markdown(-inspired) implementation
 
 ---
 
@@ -23,9 +23,10 @@ Some other markups are possible:
 
 [link]
 [link|label]
-[[image-link]]
-[[image-link|alternate text]]
+[image:image-link]
+[image:image-link|alternate text]
 http://link
+[style:class-name|text]
 
 The goal is to provide completely identical implementations in both Javascript
 and server-side languages. This allows the use of Javascript in the browser,
