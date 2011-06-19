@@ -1,4 +1,11 @@
-<?php
+<style>
+.demo {
+  border: 1px solid red;
+  display: inline-block;
+}
+</style>
+    
+    <?php
 
 include_once dirname(__FILE__) . '/breakdown.php';
 
@@ -25,22 +32,27 @@ And some more text in a second paragraph.
 
 This might be me ;-)
 
-[[http://christophevg.github.com/christophe.vg/images/avatar.png|Christophe VG]]
+[image:http://christophevg.github.com/christophe.vg/images/avatar.png|Christophe VG]
 
 even twice ...
 
-[[http://christophevg.github.com/christophe.vg/images/avatar.png]]
+[image:http://christophevg.github.com/christophe.vg/images/avatar.png]
 
 and even with a link ...
 
-[http://christophe.vg|[[http://christophevg.github.com/christophe.vg/images/avatar.png]]]
+[http://christophe.vg|[image:http://christophevg.github.com/christophe.vg/images/avatar.png]]
+
+## styling blocks
+
+[style:demo|Blocks of text can be styled with CSS.
+
+There is no limit to what *you* _can_ do ;-)]
 
 ## Include support using Ajax
 
 [include:include.php?c=1]
 ---
 [include:include.php?c=2]
-
 EOT;
 
 $converter = Breakdown::getConverter();

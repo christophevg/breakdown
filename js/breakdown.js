@@ -43,15 +43,17 @@ var Breakdown = {
 
     // bold, italic, images and links can appear anywhere in-line the text
     function translateInlines(input) {
-      return input.replace( /\*\*([^\*]+)\*\*/g,             "<b>$1</b>" )
-                  .replace( /\*([^\*]+)\*/g,                 "<i>$1</i>" )
-                  .replace( /\[\[([^\|\]]+)\|([^\]]+)\]\]/g, "<img src=\"$1\" alt=\"$2\">" )
-                  .replace( /\[\[([^\]]+)\]\]/g,             "<img src=\"$1\">" )
-                  .replace( /\[include:([^\]]+)\]/g,         insertInclude )
-                  .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,     "<a href=\"$1\">$2</a>" )
-                  .replace( /\[([^\]]+)\]/g,                 "<a href=\"$1\">$1</a>" )
-                  .replace( /([^>"]+)(http:\/\/[a-zA-Z.]+)/g,"$1<a href=\"$2\">$2</a>" )
-                  ;
+      return input
+        .replace( /\*\*([^\*]+)\*\*/g,               "<b>$1</b>" )
+        .replace( /\*([^\*]+)\*/g,                   "<i>$1</i>" )
+        .replace( /\[image:([^\|\]]+)\|([^\]]+)\]/g, "<img src=\"$1\" alt=\"$2\">" )
+        .replace( /\[image:([^\]]+)\]/g,             "<img src=\"$1\">" )
+        .replace( /\[style:([^\|\]]+)\|([^\]]+)\]/g, "<div class=\"$1\">$2</div>" )
+        .replace( /\[include:([^\]]+)\]/g,           insertInclude )
+        .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,       "<a href=\"$1\">$2</a>" )
+        .replace( /\[([^\]]+)\]/g,                   "<a href=\"$1\">$1</a>" )
+        .replace( /([^>"]+)(http:\/\/[a-zA-Z.]+)/g,  "$1<a href=\"$2\">$2</a>" )
+        ;
     };
 
     // detect blocks (based on 3 or more newlines)
