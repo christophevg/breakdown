@@ -77,8 +77,8 @@ var Breakdown = {
     function cleanUp(body) {
       return body.replace( /\n{2,}/g, "\n\n" )
                  .replace( /<\/ul>\n<ul>/g, "\n" )
-                 .replace( /<ul><li>/g, "<ul>\n<li>" )
-                 .replace( /<\/li><\/ul>/g, "</li>\n</ul>" );
+                 .replace( /<\/li>\n<ul><li>/g, "\n<ul>\n<li>" )
+                 .replace( /<\/li><\/ul>/g, "</li>\n</ul>\n</li>" );
     };
 
     // helper function to generate a header tag based on the number of hashes

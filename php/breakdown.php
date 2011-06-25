@@ -177,10 +177,10 @@ EOT;
 
   // reduce the number of newlines
   private function cleanUp($body) {
-    return preg_replace( '/\n{2,}/',       "\n\n", 
+    return preg_replace( '/<\/li><\/ul>/', "</li>\n</ul>\n</li>", 
+           preg_replace( '/<\/li>\n<ul><li>/',     "\n<ul>\n<li>",
            preg_replace( '/<\/ul>\n<ul>/', "\n",
-           preg_replace( '/<ul><li>/',     "<ul>\n<li>",
-           preg_replace( '/<\/li><\/ul>/', "</li>\n</ul>", $body ) ) ) );
+           preg_replace( '/\n{2,}/',       "\n\n", $body ) ) ) );
   }
 
   // helper function to generate blocks of HTML
