@@ -36,6 +36,7 @@ var Breakdown = {
     // headers, list items and horizontal rules are matched on a line basis
     function translateLines(input) {
       return input.replace( /^(#+)[ \t]*(.*)$/gm, generateHeader )
+                  .replace( /^\*\*[ \t]*(.*)$/gm,   "<ul><li>$1</li></ul>" )
                   .replace( /^\*[ \t]*(.*)$/gm,   "<li>$1</li>" )
                   .replace( /^---+$/gm,           "\n\n\n<hr>\n\n\n" )
                   ;
@@ -68,7 +69,10 @@ var Breakdown = {
 
     // reduce the number of newlines
     function cleanUp(body) {
-      return body.replace( /\n{2,}/g, "\n\n" );
+      return body.replace( /\n{2,}/g, "\n\n" )
+                 .replace( /<\/ul>\n<ul>/g, "\n" )
+                 .replace( /<ul><li>/g, "<ul>\n<li>" )
+                 .replace( /<\/li><\/ul>/g, "</li>\n</ul>" );
     };
 
     // helper function to generate a header tag based on the number of hashes

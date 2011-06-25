@@ -45,8 +45,12 @@ class Breakdown {
                        'return "\n\n\n<h$num>$matches[2]</h$num>\n\n\n";' 
                       ), 
       $input );
-    $patterns     = array( '/^\*[ \t]*(.*)$/m', '/^---+$/m' );
-    $replacements = array( '<li>\1</li>',        "\n\n\n<hr>\n\n\n" );
+    $patterns     = array( '/^\*\*[ \t]*(.*)$/m', 
+                           '/^\*[ \t]*(.*)$/m',
+                           '/^---+$/m' );
+    $replacements = array( '<ul><li>\1</li></ul>',
+                           '<li>\1</li>',
+                           "\n\n\n<hr>\n\n\n" );
     return preg_replace( $patterns, $replacements, $input );
   }
 
@@ -159,7 +163,10 @@ EOT;
 
   // reduce the number of newlines
   private function cleanUp($body) {
-    return preg_replace( '/\n{2,}/', "\n\n", $body );
+    return preg_replace( '/\n{2,}/',       "\n\n", 
+           preg_replace( '/<\/ul>\n<ul>/', "\n",
+           preg_replace( '/<ul><li>/',     "<ul>\n<li>",
+           preg_replace( '/<\/li><\/ul>/', "</li>\n</ul>", $body ) ) ) );
   }
 
   // helper function to generate blocks of HTML
