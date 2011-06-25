@@ -125,11 +125,25 @@ EOT;
 EOT;
   }
 
+  private function insertLink($matches) {
+    $url = $matches[1];
+    $label = count($matches) < 3 ? $url : $matches[2];
+    $url = str_replace( " ", "-", $url );
+    return "<a href=\"$url\">$label</a>";
+  }
+
   // bold, italic, images and links can appear anywhere in-line the text
   private function translateInlines($input) {
     // include support
     $input = preg_replace_callback( '/\[include:([^\]]+)\]/',
                                     array( $this, 'insertInclude' ),
+                                    $input );
+    // links
+    $input = preg_replace_callback( '/\[([^\|\]]+)\|([^\]]+)\]/',
+                                    array( $this, 'insertLink' ),
+                                    $input );
+    $input = preg_replace_callback( '/\[([^\]]+)\]/',
+                                    array( $this, 'insertLink' ),
                                     $input );
     // other inlines
     $patterns     = array( '/\*\*([^\*]+)\*\*/',
@@ -137,20 +151,16 @@ EOT;
                            '/\[image:([^\|\]]+)\|([^\]]+)\]/',
                            '/\[image:([^\]]+)\]/',
                            '/\[style:([^\|\]]+)\|([^\]]+)\]/',
-                           '/\[([^\|\]]+)\|([^\]]+)\]/',
-                           '/\[([^\]]+)\]/',
                            '/([^">])(http:\/\/[a-zA-Z.]+)/' );
     $replacements = array( '<b>\1</b>',
                            '<i>\1</i>',
-                           '<img src="\1" alt="\2">',
-                           '<img src="\1">',
                            '<div class="\1">\2</div>',
                            '<a href="\1">\2</a>',
                            '<a href="\1">\1</a>',
                            '\1<a href="\2">\2</a>' );
     return preg_replace( $patterns, $replacements, $input );
   }
-  
+
   // detect blocks (based on 3 or more newlines)
   private function addBlocks($input) {
     $blocks = preg_split( '/\n{3,}/', $input );

@@ -51,11 +51,17 @@ var Breakdown = {
         .replace( /\[image:([^\]]+)\]/g,             "<img src=\"$1\">" )
         .replace( /\[style:([^\|\]]+)\|([^\]]+)\]/g, "<div class=\"$1\">$2</div>" )
         .replace( /\[include:([^\]]+)\]/g,           insertInclude )
-        .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,       "<a href=\"$1\">$2</a>" )
-        .replace( /\[([^\]]+)\]/g,                   "<a href=\"$1\">$1</a>" )
+        .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,       createLink )
+        .replace( /\[([^\]]+)\]/g,                   createLink )
         .replace( /([^>"]+)(http:\/\/[a-zA-Z.]+)/g,  "$1<a href=\"$2\">$2</a>" )
         ;
     };
+    
+    function createLink(m, url, label, offset, s) {
+      if( ! s ) { label = url; }      
+      url = url.replace( / /g, '-' );
+      return '<a href="' + url + '">' + label + '</a>'; 
+    }
 
     // detect blocks (based on 3 or more newlines)
     function addBlocks(input) {
