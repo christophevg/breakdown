@@ -131,13 +131,27 @@ EOT;
     $url = str_replace( " ", "-", $url );
     return "<a href=\"$url\">$label</a>";
   }
-
+  
   // bold, italic, images and links can appear anywhere in-line the text
   private function translateInlines($input) {
     // include support
     $input = preg_replace_callback( '/\[include:([^\]]+)\]/',
                                     array( $this, 'insertInclude' ),
                                     $input );
+
+    // bold, italic, images and styled blocks
+    $patterns     = array( '/\*\*([^\*]+)\*\*/',
+                           '/\*([^\*]+)\*/',
+                           '/\[image:([^\|\]]+)\|([^\]]+)\]/',
+                           '/\[image:([^\]]+)\]/',
+                           '/\[style:([^\|\]]+)\|([^\]]+)\]/' );
+    $replacements = array( '<b>\1</b>',
+                           '<i>\1</i>',
+                           '<img src="\1" alt="\2">',
+                           '<img src="\1">',
+                           '<div class="\1">\2</div>' );
+    $input = preg_replace( $patterns, $replacements, $input );
+    
     // links
     $input = preg_replace_callback( '/\[([^\|\]]+)\|([^\]]+)\]/',
                                     array( $this, 'insertLink' ),
@@ -145,20 +159,10 @@ EOT;
     $input = preg_replace_callback( '/\[([^\]]+)\]/',
                                     array( $this, 'insertLink' ),
                                     $input );
-    // other inlines
-    $patterns     = array( '/\*\*([^\*]+)\*\*/',
-                           '/\*([^\*]+)\*/',
-                           '/\[image:([^\|\]]+)\|([^\]]+)\]/',
-                           '/\[image:([^\]]+)\]/',
-                           '/\[style:([^\|\]]+)\|([^\]]+)\]/',
-                           '/([^">])(http:\/\/[a-zA-Z.]+)/' );
-    $replacements = array( '<b>\1</b>',
-                           '<i>\1</i>',
-                           '<div class="\1">\2</div>',
-                           '<a href="\1">\2</a>',
-                           '<a href="\1">\1</a>',
-                           '\1<a href="\2">\2</a>' );
-    return preg_replace( $patterns, $replacements, $input );
+    $input = preg_replace( '/([^">])(http:\/\/[a-zA-Z.]+)/',
+                           '\1<a href="\2">\2</a>',
+                           $input );
+    return $input;
   }
 
   // detect blocks (based on 3 or more newlines)
