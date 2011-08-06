@@ -109,9 +109,10 @@ EOT;
     $this->includeIndex++;
     $id = "_include_{$this->includeIndex}";
     $url = $matches[1];
+    $page = ereg_replace( '\?.*$', '', $url );
 
     return <<<EOT
-<div style="display:inline" id="$id"></div>
+<div style="display:inline" id="$id" class="placeholder $page"></div>
 <script>
   includeFunctions.push( function() {
     fetch( '$url', function(responseText) {

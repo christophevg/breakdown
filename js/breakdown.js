@@ -149,8 +149,10 @@ var Breakdown = {
       includeFunctions.push( function(url, index) { return function(cb) {
         include( url, "_include_" + index, cb );
       } }( location, includeIndex ) );
-      return '<div style="display:inline" id="_include_' + includeIndex + '">' +
-             '</div>' + "\n";
+      var page = location.replace( /\?.*$/, "" );
+      return '<div style="display:inline" id="_include_' + includeIndex + '" '
+             + ' class="placeholder ' + page + '">'
+             + '</div>' + "\n";
     }
 
     function include(url, element, cb) {
