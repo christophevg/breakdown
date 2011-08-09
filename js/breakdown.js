@@ -161,6 +161,14 @@ var Breakdown = {
           response = '<div class="bd-error">failed to include '+url+'</div>';
         }
         document.getElementById( element ).innerHTML = response;
+
+        // the response might include JS, make sure it gets executed
+        var findScript = /<\/?script>/mg;
+        var matches = response.split(findScript);
+        for( var i=1; i<matches.length; i=i+2 ) {
+          eval( matches[i] );
+        }
+
         if( typeof cb == "function" ) { cb(); }
       } );
     }
