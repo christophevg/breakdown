@@ -119,7 +119,16 @@ EOT;
       if( ! responseText ) {
         responseText = '<div class="bd-error">failed to include $url</div>';
       }
+
       document.getElementById('$id').innerHTML = responseText;
+
+      // the response might include JS, make sure it gets executed
+      var findScript = /<\/?script>/mg;
+      var matches = responseText.split(findScript);
+      for( var i=1; i<matches.length; i=i+2 ) {
+        eval( matches[i] );
+      }
+      
     } );
   } );
 </script>
@@ -135,11 +144,6 @@ EOT;
   
   // bold, italic, images and links can appear anywhere in-line the text
   private function translateInlines($input) {
-    // include support
-    $input = preg_replace_callback( '/\[include:([^\]]+)\]/',
-                                    array( $this, 'insertInclude' ),
-                                    $input );
-
     // bold, italic, images and styled blocks
     $patterns     = array( '/\*\*([^\*]+)\*\*/',
                            '/\*([^\*]+)\*/',
@@ -157,12 +161,18 @@ EOT;
     $input = preg_replace_callback( '/\[([^\|\]]+)\|([^\]]+)\]/',
                                     array( $this, 'insertLink' ),
                                     $input );
-    $input = preg_replace_callback( '/\[([^\]]+)\]/',
+    $input = preg_replace_callback( '/\[(?!include:)([^\]]+)\]/',
                                     array( $this, 'insertLink' ),
                                     $input );
     $input = preg_replace( '/([^">])(http:\/\/[a-zA-Z.]+)/',
                            '\1<a href="\2">\2</a>',
                            $input );
+
+    // include support
+    $input = preg_replace_callback( '/\[include:([^\]]+)\]/',
+                                    array( $this, 'insertInclude' ),
+                                    $input );
+
     return $input;
   }
 
