@@ -165,8 +165,12 @@ var Breakdown = {
         // the response might include JS, make sure it gets executed
         var findScript = /<\/?script>/mg;
         var matches = response.split(findScript);
-        for( var i=1; i<matches.length; i=i+2 ) {
-          eval( matches[i] );
+        for( var i=0; i<matches.length; i++ ) {
+          try {
+            eval( matches[i] );
+          } catch( err ) {
+            // this happens with non javascript or bad javascript in IE            
+          }
         }
 
         if( typeof cb == "function" ) { cb(); }
