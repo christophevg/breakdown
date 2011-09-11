@@ -139,7 +139,19 @@ EOT;
     $url = $matches[1];
     $label = count($matches) < 3 ? $url : $matches[2];
     $url = str_replace( " ", "-", $url );
+    if( preg_match( '/([a-zA-Z0-9\.\-_\+]+@[a-zA-Z0-9\.\-_]+)/', $url ) ) {
+      $url = 'mailto:' . $url;
+    }
     return "<a href=\"$url\">$label</a>";
+  }
+  
+  private function insertEmail($matches) {
+    $url = $matches[1];
+    if( preg_match( '/^mailto:/', $url ) ) {
+      return $url;
+    } else {
+      return '<a href="mailto:' . $url . '">' . $url . '</a>';
+    }
   }
   
   // bold, italic, images and links can appear anywhere in-line the text
@@ -147,11 +159,15 @@ EOT;
     // bold, italic, images and styled blocks
     $patterns     = array( '/\*\*([^\*]+)\*\*/',
                            '/\*([^\*]+)\*/',
+                           '/\[image:([^\|\]]+)\|([^\|\]]+)\|(left|right)\]/',
+                           '/\[image:([^\|\]]+)\|(left|right)\]/',
                            '/\[image:([^\|\]]+)\|([^\]]+)\]/',
                            '/\[image:([^\]]+)\]/',
                            '/\[style:([^\|\]]+)\|([^\]]+)\]/' );
     $replacements = array( '<b>\1</b>',
                            '<i>\1</i>',
+                           '<img src="\1" alt="\2" style="float:\3">',
+                           '<img src="\1" style="float:\2">',
                            '<img src="\1" alt="\2">',
                            '<img src="\1">',
                            '<div class="\1">\2</div>' );
@@ -167,6 +183,10 @@ EOT;
     $input = preg_replace( '/([^">])(http:\/\/[a-zA-Z.]+)/',
                            '\1<a href="\2">\2</a>',
                            $input );
+    // email links
+    $input = preg_replace_callback( '/([:a-zA-Z0-9\.\-_\+]+@[a-zA-Z0-9\.\-_]+)/',
+                                    array( $this, 'insertEmail' ),
+                                    $input );
 
     // include support
     $input = preg_replace_callback( '/\[include:([^\]]+)\]/',
@@ -206,6 +226,7 @@ EOT;
     } else if( preg_match( '/^<li>/', $body ) ) {
       return "<ul>\n$body\n</ul>";
     } else {
+      $body = preg_replace( '/  \n/', "<br>\n", $body );
       return "<p>$body</p>";
     }
   }

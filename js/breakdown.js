@@ -47,19 +47,23 @@ var Breakdown = {
       return input
         .replace( /\*\*([^\*]+)\*\*/g,               "<b>$1</b>" )
         .replace( /\*([^\*]+)\*/g,                   "<i>$1</i>" )
-        .replace( /\[image:([^\|\]]+)\|([^\]]+)\]/g, "<img src=\"$1\" alt=\"$2\">" )
+        .replace( /\[image:([^\|\]]+)\|([^\|\]]+)\|(right|left)\]/g, "<img src=\"$1\" alt=\"$2\" style=\"float:$3\">" )
+        .replace( /\[image:([^\|\]]+)\|(right|left)\]/g, "<img src=\"$1\" style=\"float:$2\">" )
+        .replace( /\[image:([^\|\]]+)\|([^\|\]]+)\]/g, "<img src=\"$1\" alt=\"$2\">" )
         .replace( /\[image:([^\]]+)\]/g,             "<img src=\"$1\">" )
         .replace( /\[style:([^\|\]]+)\|([^\]]+)\]/g, "<div class=\"$1\">$2</div>" )
         .replace( /\[include:([^\]]+)\]/g,           insertInclude )
         .replace( /\[([^\|\]]+)\|([^\]]+)\]/g,       createLink )
         .replace( /\[([^\]]+)\]/g,                   createLink )
         .replace( /([^>"]+)(http:\/\/[a-zA-Z.]+)/g,  "$1<a href=\"$2\">$2</a>" )
+        .replace( / ([a-zA-Z0-9\.\-_\+]+@[a-zA-Z0-9\.\-_]+)/g, " <a href=\"mailto:$1\">$1</a>" )
         ;
     };
     
     function createLink(m, url, label, offset, s) {
       if( ! s ) { label = url; }      
       url = url.replace( / /g, '-' );
+      if( /^([a-zA-Z0-9\.\-_\+]+@[a-zA-Z0-9\.\-_]+)$/.test(url) ) { url = "mailto:" + url; }
       return '<a href="' + url + '">' + label + '</a>'; 
     }
 
@@ -99,6 +103,7 @@ var Breakdown = {
       } else if( body.match( /^<li>/ ) ) {
         return "<ul>\n" + body + "\n</ul>";
       } else {
+        body = body.replace( /  \n/g, "<br>\n" )
         return "<p>" + body + "</p>";
       }
     };
